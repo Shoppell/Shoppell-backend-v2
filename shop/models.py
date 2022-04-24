@@ -35,7 +35,7 @@ class Category(models.Model):
     modified = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
-        for x in [self.photo, ]:
+        for x in [self.image, ]:
             if x:
                 super().save(*args, **kwargs)
                 resize(x.path)
@@ -54,20 +54,20 @@ class Product(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     first_page = models.BooleanField(default=True)
-    image = models.ImageField(upload_to='products')
-
+   
     def get_off(self):
         return int(100*(self.last_price/self.price))
 
     def __str__(self):
         return self.name
 
+class ProductImage(models.Model):
+    image = models.ImageField(upload_to='products')
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
     def save(self, *args, **kwargs):
         for x in [self.image, ]:
             if x:
                 super().save(*args, **kwargs)
                 resize(x.path)
-
-
-  
-
