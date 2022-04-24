@@ -15,6 +15,7 @@ class ProductList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
 class ProductRUD(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [IsAuthenticated]
 
@@ -23,15 +24,17 @@ class ProductImageCreate(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
 class ProductImageList(generics.ListAPIView):
-    queryset = Product.objects.all()
+    queryset = ProductImage.objects.all()
     serializer_class = ProductImageSerializer
     permission_classes = [IsAuthenticated]
 
 class ProductImageRUD(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ProductImage.objects.all()
     serializer_class = ProductImageSerializer
     permission_classes = [IsAuthenticated]
 
 class ShopCreate(generics.CreateAPIView):
+    queryset = Shop.objects.all()
     serializer_class = ShopSerializer
     permission_classes = [IsAuthenticated]
 
@@ -41,8 +44,9 @@ class ShopList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
 class ShopRUD(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Shop.objects.all()
     serializer_class = ShopSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
 class CategoryCreate(generics.CreateAPIView):
     serializer_class = CategorySerializer
@@ -54,6 +58,7 @@ class CategoryList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
 class CategoryRUD(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticated]
 

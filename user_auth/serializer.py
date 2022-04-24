@@ -4,11 +4,8 @@ import secrets
 from user_auth import helper
 from django.utils import timezone
 
-
 class LoginSerializer(serializers.Serializer):
     otp = serializers.IntegerField()
-
-
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:

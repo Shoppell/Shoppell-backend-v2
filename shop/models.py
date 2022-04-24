@@ -23,7 +23,7 @@ class Shop(models.Model):
     slug = models.SlugField(unique=True, blank=False)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     
     def __str__(self):
         return self.name
@@ -43,7 +43,20 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+class ProductImage(models.Model):
+    image = models.ImageField(upload_to='products')
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        for x in [self.image, ]:
+            if x:
+                super().save(*args, **kwargs)
+                resize(x.path)
+    
+
 class Product(models.Model):
+    product_images = models.ManyToManyField(ProductImage)
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     payment_link = models.CharField(max_length=200)
@@ -61,13 +74,3 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-class ProductImage(models.Model):
-    image = models.ImageField(upload_to='products')
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
-
-    def save(self, *args, **kwargs):
-        for x in [self.image, ]:
-            if x:
-                super().save(*args, **kwargs)
-                resize(x.path)

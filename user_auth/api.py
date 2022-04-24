@@ -6,7 +6,12 @@ from django.contrib.auth import login
 from user_auth import helper
 from django.utils import timezone
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated
 
+class UserRUD(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
 
 class LoginApi(generics.GenericAPIView):
     serializer_class = LoginSerializer
@@ -45,8 +50,8 @@ class RegisterApi(generics.GenericAPIView):
 
     def post(self, request, *args,  **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid()
-        mobile = serializer.data['mobile']
+        serializer.is_valid(raise_exception=True)
+        mobile = serializer.validated_data['mobile']
         request.session['user_mobile'] = mobile
         try:
             user = User.objects.get(mobile=mobile)
