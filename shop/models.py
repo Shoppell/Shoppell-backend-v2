@@ -43,22 +43,15 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-class ProductImage(models.Model):
-    image = models.ImageField(upload_to='products')
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
-
-    def save(self, *args, **kwargs):
-        for x in [self.image, ]:
-            if x:
-                super().save(*args, **kwargs)
-                resize(x.path)
-    
-
 class Product(models.Model):
-    product_images = models.ManyToManyField(ProductImage)
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    image1 = models.ImageField(upload_to='products')
+    image2 = models.ImageField(upload_to='products', blank=True, null=True)
+    image3 = models.ImageField(upload_to='products', blank=True, null=True)
+    image4 = models.ImageField(upload_to='products', blank=True, null=True)
+    image5 = models.ImageField(upload_to='products', blank=True, null=True)
+    image6 = models.ImageField(upload_to='products', blank=True, null=True)
     payment_link = models.CharField(max_length=200)
     name = models.CharField(max_length=100)
     price = models.PositiveIntegerField()

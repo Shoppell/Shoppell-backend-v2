@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions, mixins
 from rest_framework.response import Response
-from .serializer import ProductImageSerializer, ShopSerializer, ProductSerializer, CategorySerializer, ProductImage
+from .serializer import ShopSerializer, ProductSerializer, CategorySerializer
 from user_auth.models import User
 from .models import Product, Shop, Category
 from rest_framework.permissions import IsAuthenticated
@@ -17,20 +17,6 @@ class ProductList(generics.ListAPIView):
 class ProductRUD(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticated]
-
-class ProductImageCreate(generics.CreateAPIView):
-    serializer_class = ProductImageSerializer
-    permission_classes = [IsAuthenticated]
-
-class ProductImageList(generics.ListAPIView):
-    queryset = ProductImage.objects.all()
-    serializer_class = ProductImageSerializer
-    permission_classes = [IsAuthenticated]
-
-class ProductImageRUD(generics.RetrieveUpdateDestroyAPIView):
-    queryset = ProductImage.objects.all()
-    serializer_class = ProductImageSerializer
     permission_classes = [IsAuthenticated]
 
 class ShopCreate(generics.CreateAPIView):
