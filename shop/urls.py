@@ -1,4 +1,4 @@
-from django.urls import URLPattern, path
+from django.urls import path
 from shop import api
 
 urlpatterns = [
@@ -13,3 +13,4 @@ urlpatterns = [
     path('category/list', api.CategoryList.as_view()),
 
 ]
+

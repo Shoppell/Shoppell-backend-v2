@@ -18,7 +18,7 @@ def resize(nameOfFile):
 class Shop(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='shops')
-    cover = models.ImageField(upload_to='cover')
+    cover = models.ImageField(upload_to='cover', default='media\cover\default_cover.jpg')
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, blank=False)
     created = models.DateTimeField(auto_now_add=True)
