@@ -4,6 +4,9 @@ import secrets
 from user_auth import helper
 from django.utils import timezone
 
+class GateSerializer(serializers.Serializer):
+    cash = serializers.IntegerField()
+    
 class LoginSerializer(serializers.Serializer):
     otp = serializers.IntegerField()
 
