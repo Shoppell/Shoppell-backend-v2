@@ -45,8 +45,9 @@ INSTALLED_APPS = [
     'user_auth',
     'shop',
 
-    'django.contrib.postgres',
+    'django.contrib.postgres'
   
+
 ]
 
 AUTHENTICATION_BACKENDS = [
