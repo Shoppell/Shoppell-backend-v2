@@ -44,8 +44,9 @@ INSTALLED_APPS = [
     # Apps
     'user_auth',
     'shop',
-  
 
+    'django.contrib.postgres',
+  
 ]
 
 AUTHENTICATION_BACKENDS = [

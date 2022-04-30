@@ -11,6 +11,4 @@ urlpatterns = [
     path('category/create/', api.CategoryCreate.as_view()),
     path('category/rud/<int:pk>', api.CategoryRUD.as_view()),
     path('category/list', api.CategoryList.as_view()),
-
 ]
-

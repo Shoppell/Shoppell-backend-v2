@@ -17,6 +17,8 @@ urlpatterns = [
     path('api/v1/category/create/', api.CategoryCreate.as_view()),
     path('api/v1/category/rud/<int:pk>', api.CategoryRUD.as_view()),
     path('api/v1/category/list', api.CategoryList.as_view()),
+    path('api/v1/product/search', api.ProductSearch.as_view()),
+    path('api/v1/shop/search', api.ShopSearch.as_view()),
 
     path('api/v1/user/', include('user_auth.urls')),
   
