@@ -9,6 +9,7 @@ class User(AbstractUser):
     mobile = models.CharField(max_length=11, unique=True)
     otp = models.PositiveIntegerField(blank=True, null=True)
     otp_create_time = models.DateTimeField(auto_now=True)
+    cash = models.IntegerField(default=0, null=True)
 
     objects = MyUserManager()
     USERNAME_FIELD = 'mobile'
