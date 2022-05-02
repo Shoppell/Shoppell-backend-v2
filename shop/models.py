@@ -1,6 +1,3 @@
-from email.policy import default
-from statistics import mode
-from tkinter import CASCADE
 from django.db import models
 from django.utils import timezone
 from user_auth.models import User
@@ -32,6 +29,12 @@ class Shop(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     description = models.TextField(null=True, blank=True)
+    is_verify = models.BooleanField(default=False)
+    priority = models.PositiveIntegerField(default=0)
+    instagram_link = models.CharField(max_length=100, blank=True, null=True)
+    telegram_link = models.CharField(max_length=100, blank=True, null=True)
+    website_link = models.CharField(max_length=100, blank=True, null=True)
+    whatsapp_link = models.CharField(max_length=100, blank=True, null=True)
     
     def __str__(self):
         return self.name
@@ -68,6 +71,7 @@ class Product(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     first_page = models.BooleanField(default=True)
+    priority = models.PositiveIntegerField(default=0)
    
     def get_off(self):
         return int(100*(self.last_price/self.price))
