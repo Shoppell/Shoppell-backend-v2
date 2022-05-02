@@ -12,7 +12,7 @@ def send_otp(mobile, otp):
     sms_rest = api.sms()
     text = [otp, ]
     to = mobile
-    bodyId = 77985
+    bodyId = 84130
     sms_rest.send_by_base_number(text, to, bodyId)
 
 
