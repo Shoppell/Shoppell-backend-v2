@@ -7,6 +7,14 @@ from user_auth.models import User
 from PIL import Image
 from persian_tools import digits, separator
 
+choices_rate = (
+    (1, 1),
+    (2, 2),
+    (3, 3),
+    (4, 4),
+    (5, 5),
+)
+
 
 def resize(nameOfFile):
     img = Image.open(nameOfFile)
@@ -67,3 +75,33 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+class SavedProduct(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.product.name +" "+ self.user.mobile
+
+class ProductComment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    description = models.TextField()
+    grade = models.PositiveIntegerField(choices=choices_rate)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.product.name +" "+ self.user.mobile
+
+class ShopComment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
+    description = models.TextField()
+    grade = models.PositiveIntegerField(choices=choices_rate)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.shop.name +" "+ self.user.mobile

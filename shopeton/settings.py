@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     # Apps
     'user_auth',
     'shop',
+    
+    'azbankgateways',
 
     'django.contrib.postgres'
   

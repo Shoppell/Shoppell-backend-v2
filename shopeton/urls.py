@@ -10,20 +10,8 @@ from azbankgateways.urls import az_bank_gateways_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     
-    path('api/v1/product/create/', api.ProductCreate.as_view()),
-    path('api/v1/product/rud/<int:pk>', api.ProductRUD.as_view()),
-    path('api/v1/product/list', api.ProductList.as_view()),
-    path('api/v1/shop/create/', api.ShopCreate.as_view()),
-    path('api/v1/shop/rud/<int:pk>', api.ShopRUD.as_view()),
-    path('api/v1/shop/list', api.ShopList.as_view()),
-    path('api/v1/category/create/', api.CategoryCreate.as_view()),
-    path('api/v1/category/rud/<int:pk>', api.CategoryRUD.as_view()),
-    path('api/v1/category/list', api.CategoryList.as_view()),
-    path('api/v1/product/search', api.ProductSearch.as_view()),
-    path('api/v1/shop/search', api.ShopSearch.as_view()),
-
+    path('api/v1/shop/', include('shop.urls')),
     path('api/v1/user/', include('user_auth.urls')),
-
     path('bankgateways/', az_bank_gateways_urls()),
   
 ]
