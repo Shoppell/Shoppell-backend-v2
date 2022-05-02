@@ -83,7 +83,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'shopeton.urls'
+ROOT_URLCONF = 'shoppell.urls'
 
 TEMPLATES = [
     {
@@ -101,7 +101,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'shopeton.wsgi.application'
+WSGI_APPLICATION = 'shoppell.wsgi.application'
 
 
 # Database
