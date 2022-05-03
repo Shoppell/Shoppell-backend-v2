@@ -69,7 +69,7 @@ class Shop(models.Model):
     is_ban = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
-        for x in [self.image,self.cover ]:
+        for x in [self.image, ]:
             if x:
                 super().save(*args, **kwargs)
                 resize(x.path)
@@ -176,3 +176,35 @@ class ShopComment(models.Model):
         else:
             self.is_bad = False
         super().save(*args, **kwargs)
+
+class ReportShop(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    shop = models.ForeignKey(Shop, on_delete=models.SET_NULL, null=True)
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    def __str__(self):
+        return self.shop.name +" "+ self.user.mobile
+
+class ReportProduct(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    def __str__(self):
+        return self.product.name +" "+ self.user.mobile
+
+class Ticket(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    def __str__(self):
+        return self.product.name +" "+ self.user.mobile
