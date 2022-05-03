@@ -1,7 +1,7 @@
 from rest_framework import generics, permissions, mixins, status
 from rest_framework.response import Response
-from .models import SmsPack, BannerPack, ReportProduct, ReportShop, Ticket, IPAddress, DailyProductView, DailyShopView, CartBanner, CartSms, Order
-from .serializer import SmsPackSerializer, BannerPackSerializer, ReportProductSerializer, ReportShopSerializer, TicketSerializer, IPAddressSerializer, DailyProductViewSerializer, DailyShopViewSerializer, CartBannerSerializer, CartSmsSerializer, OrderSerializer
+from .models import SmsPack, BannerPack, ReportProduct, ReportShop, Ticket, IPAddress, DailyProductView, DailyShopView, CartBanner, CartSms, Order, UsedBanner, UsedSms
+from .serializer import SmsPackSerializer, BannerPackSerializer, ReportProductSerializer, ReportShopSerializer, TicketSerializer, IPAddressSerializer, DailyProductViewSerializer, DailyShopViewSerializer, CartBannerSerializer, CartSmsSerializer, OrderSerializer, UsedBannerSerializer, UsedSmsSerializer
 
 
 class SmsPackCreate(generics.CreateAPIView):
@@ -152,19 +152,50 @@ class CartSmsRUD(generics.RetrieveUpdateDestroyAPIView):
     queryset = CartSms.objects.all()
     serializer_class = CartSmsSerializer
 
-class  OrderCreate(generics.CreateAPIView):
+class OrderCreate(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
-        serializer =  OrderSerializer(data=request.data)
+        serializer = OrderSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         new_serializer = serializer.save(user=request.user)
-        return Response( OrderSerializer(new_serializer).data)
+        return Response(OrderSerializer(new_serializer).data)
 
-class  OrderList(generics.ListAPIView):
+class OrderList(generics.ListAPIView):
     queryset = CartSms.objects.all()
     serializer_class = CartSmsSerializer
 
-class  OrderRUD(generics.RetrieveUpdateDestroyAPIView):
+class OrderRUD(generics.RetrieveUpdateDestroyAPIView):
     queryset =  Order.objects.all()
     serializer_class =  OrderSerializer
     
+class UsedBannerCreate(generics.CreateAPIView):
+
+    def post(self, request, *args, **kwargs):
+        serializer = UsedBannerSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        new_serializer = serializer.save(user=request.user)
+        return Response(UsedBannerSerializer(new_serializer).data)
+
+class UsedBannerList(generics.ListAPIView):
+    queryset = UsedBanner.objects.all()
+    serializer_class = UsedBannerSerializer
+
+class UsedBannerRUD(generics.RetrieveUpdateDestroyAPIView):
+    queryset = UsedBanner.objects.all()
+    serializer_class =  UsedBannerSerializer
+
+class UsedSmsCreate(generics.CreateAPIView):
+
+    def post(self, request, *args, **kwargs):
+        serializer = UsedSmsSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        new_serializer = serializer.save(user=request.user)
+        return Response(UsedSmsSerializer(new_serializer).data)
+
+class UsedSmsList(generics.ListAPIView):
+    queryset = UsedSms.objects.all()
+    serializer_class = UsedSmsSerializer
+
+class UsedSmsRUD(generics.RetrieveUpdateDestroyAPIView):
+    queryset = UsedSms.objects.all()
+    serializer_class = UsedSmsSerializer

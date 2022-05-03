@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from user_auth.serializer import UserSerializer
-from .models import SmsPack, BannerPack, ReportShop, ReportProduct, Ticket, IPAddress, DailyProductView, DailyShopView, CartBanner, CartSms, Order
+from .models import SmsPack, BannerPack, ReportShop, ReportProduct, Ticket, IPAddress, DailyProductView, DailyShopView, CartBanner, CartSms, Order, UsedBanner, UsedSms
 
 class SmsPackSerializer(serializers.ModelSerializer):
  
@@ -74,5 +74,19 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
+        fields = '__all__'
+
+class UsedBannerSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = UsedBanner
+        fields = '__all__'
+
+class UsedSmsSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = UsedSms
         fields = '__all__'
         

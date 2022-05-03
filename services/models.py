@@ -1,5 +1,5 @@
 from ipaddress import ip_address
-from pyexpat import model
+# from pyexpat import model
 from turtle import mode
 from django.db import models
 from django.forms import model_to_dict

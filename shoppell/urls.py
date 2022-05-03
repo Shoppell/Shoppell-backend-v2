@@ -9,6 +9,7 @@ from azbankgateways.urls import az_bank_gateways_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/services/', include('services.urls')),
     path('api/v1/shop/', include('shop.urls')),
     path('api/v1/user/', include('user_auth.urls')),
     path('bankgateways/', az_bank_gateways_urls()),
