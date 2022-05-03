@@ -6,7 +6,7 @@ from django.utils import timezone
 from user_auth.models import User
 from PIL import Image
 from persian_tools import digits, separator
-from shoppell.PersianSwear import PersianSwear
+from shop.PersianSwear import PersianSwear
 
 choices_rate = (
     (1, 1),
@@ -89,6 +89,7 @@ class Product(models.Model):
     priority = models.PositiveIntegerField(default=0)
     is_hide = models.PositiveIntegerField(default=False)
     rating = models.DecimalField(default=0, max_digits=3, decimal_places=1)
+
 
     def save(self, *args, **kwargs):
         for x in [self.image1, self.image2, self.image3, self.image4, self.image5, self.image6 ]:

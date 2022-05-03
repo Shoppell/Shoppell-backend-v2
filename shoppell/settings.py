@@ -82,6 +82,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # ip saver 
+    'services.middleware.SaveIpAddressMiddleware',
 ]
 
 ROOT_URLCONF = 'shoppell.urls'

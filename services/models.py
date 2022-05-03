@@ -1,4 +1,8 @@
+from ipaddress import ip_address
+from pyexpat import model
+from turtle import mode
 from django.db import models
+from django.forms import model_to_dict
 from user_auth.models import User
 from shop.models import Shop, Product
 from PIL import Image
@@ -9,22 +13,50 @@ def resize(nameOfFile):
     img.resize(size, Image.ANTIALIAS).save(nameOfFile)
     img.save(nameOfFile)
 
-class SmsOrder(models.Model):
+class UsedSms(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    user_mobile = models.CharField(max_length=20)
+    user_mobile = models.CharField(max_length=20, blank=True, null=True)
     text = models.TextField()
-    price = models.PositiveIntegerField(default=0)
-    to_users = models.JSONField()
+    to_users = models.ManyToManyField(User, related_name="sms_receiver")
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+    counts = models.IntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+        self.user_mobile = self.user.mobile
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.user.mobile + " " + self.created
+        return self.user.mobile 
 
-class BannerAd(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='shops')
-    link = models.TextField()
+class UsedBanner(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    user_mobile = models.CharField(max_length=20, blank=True, null=True)
+    text = models.TextField()
+    duration = models.DurationField()
+    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+    image = models.ImageField(upload_to='banner')
+
+    def save(self, *args, **kwargs):
+        for x in [self.image, ]:
+            if x:
+                super().save(*args, **kwargs)
+                resize(x.path)
+        self.user_mobile = self.user.mobile
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.user.mobile 
+
+
+class SmsPack(models.Model):
+    image = models.ImageField(upload_to='smspack')
+    count = models.IntegerField(default=0)
+    price = models.IntegerField()
+    last_price = models.IntegerField()
+    title = models.CharField(max_length=100)
+    sub_title = models.CharField(max_length=200)
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
@@ -35,7 +67,26 @@ class BannerAd(models.Model):
                 resize(x.path)
 
     def __str__(self):
-        return self.user.mobile + " " + self.created
+        return self.title
+        
+class BannerPack(models.Model):
+    image = models.ImageField(upload_to='bannerpack')
+    title = models.CharField(max_length=100)
+    sub_title = models.CharField(max_length=200)
+    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+    price = models.IntegerField()
+    last_price = models.IntegerField()
+    duration = models.DurationField()
+
+    def save(self, *args, **kwargs):
+        for x in [self.image, ]:
+            if x:
+                super().save(*args, **kwargs)
+                resize(x.path)
+
+    def __str__(self):
+        return self.title
 
 class ReportShop(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -69,3 +120,52 @@ class Ticket(models.Model):
     def __str__(self):
         return self.title +" "+ self.user.mobile
 
+class IPAddress(models.Model):
+    ip_address = models.GenericIPAddressField()
+    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    def __str__(self):
+        return self.ip_address
+
+class DailyProductView(models.Model):
+    user_ip = models.ForeignKey(IPAddress, on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    view = models.PositiveIntegerField(default=0)
+    date = models.DateField(auto_now_add=True, null=True, blank=True)
+
+    def __str__(self):
+        return self.user_ip
+
+class DailyShopView(models.Model):
+    user_ip = models.ForeignKey(IPAddress, on_delete=models.SET_NULL, null=True)
+    shop = models.ForeignKey(Shop, on_delete=models.SET_NULL, null=True)
+    view = models.PositiveIntegerField(default=0)
+    date = models.DateField(auto_now_add=True, null=True, blank=True)
+
+    def __str__(self):
+        return self.user_ip
+
+#   ip_address = request.user.ip_address
+#     if ip_address not in shop.hits.all():
+#         shop.hits.add(ip_address)
+
+class CartBanner(models.Model):
+    banner_pack = models.ForeignKey(BannerPack, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+class CartSms(models.Model):
+    sms_pack = models.ForeignKey(SmsPack, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    sms_packs = models.ManyToManyField(CartSms)
+    banner_packs = models.ManyToManyField(CartBanner)
+    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+    paid = models.BooleanField(default=False)
