@@ -59,7 +59,6 @@ class ProductCommentRUD(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductCommentSerializer
 
 
-
 class ProductCreate(generics.CreateAPIView):
     serializer_class = ProductSerializer
     permission_classes = [IsAuthenticated]
