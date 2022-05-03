@@ -1,10 +1,12 @@
 from statistics import mode
+from traceback import print_tb
 from django.db import models
 from django.forms import ImageField
 from django.utils import timezone
 from user_auth.models import User
 from PIL import Image
 from persian_tools import digits, separator
+from shoppell.PersianSwear import PersianSwear
 
 choices_rate = (
     (1, 1),
@@ -39,6 +41,12 @@ class BannerAd(models.Model):
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
+    def save(self, *args, **kwargs):
+        for x in [self.image, ]:
+            if x:
+                super().save(*args, **kwargs)
+                resize(x.path)
+
     def __str__(self):
         return self.user.mobile + " " + self.created
 
@@ -58,7 +66,19 @@ class Shop(models.Model):
     website_link = models.CharField(max_length=100, blank=True, null=True)
     whatsapp_link = models.CharField(max_length=100, blank=True, null=True)
     evidence = models.ImageField(upload_to='evidences', blank=True, null=True)
-    
+    rating = models.DecimalField(default=0, max_digits=3, decimal_places=1)
+    is_ban = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        for x in [self.image,self.cover ]:
+            if x:
+                super().save(*args, **kwargs)
+                resize(x.path)
+        self.instagram_link = "https://www.instagram.com/"+ self.instagram_link+"/"
+        self.whatsapp_link = "https://wa.me/" + self.whatsapp_link 
+        self.telegram_link = "https://t.me/" + self.telegram_link
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.name
 
@@ -95,7 +115,15 @@ class Product(models.Model):
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
     first_page = models.BooleanField(default=True)
     priority = models.PositiveIntegerField(default=0)
-   
+    is_hide = models.PositiveIntegerField(default=False)
+    rating = models.DecimalField(default=0, max_digits=3, decimal_places=1)
+
+    def save(self, *args, **kwargs):
+        for x in [self.image1, self.image2, self.image3, self.image4, self.image5, self.image6 ]:
+            if x:
+                super().save(*args, **kwargs)
+                resize(x.path)
+
     def get_off(self):
         return int(100*(self.last_price/self.price))
 
@@ -118,9 +146,18 @@ class ProductComment(models.Model):
     grade = models.PositiveIntegerField(choices=choices_rate)
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+    is_bad = models.BooleanField(default=False)
 
     def __str__(self):
         return self.product.name +" "+ self.user.mobile
+
+    def save(self, *args, **kwargs):
+        persianswear = PersianSwear()
+        if persianswear.is_bad(self.description):
+            self.is_bad = True
+        else:
+            self.is_bad = False
+        super().save(*args, **kwargs)
 
 class ShopComment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -132,3 +169,11 @@ class ShopComment(models.Model):
 
     def __str__(self):
         return self.shop.name +" "+ self.user.mobile
+    
+    def save(self, *args, **kwargs):
+        persianswear = PersianSwear()
+        if persianswear.is_bad(self.description):
+            self.is_bad = True
+        else:
+            self.is_bad = False
+        super().save(*args, **kwargs)
