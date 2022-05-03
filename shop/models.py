@@ -78,19 +78,19 @@ class Category(models.Model):
         return self.name
 
 class Product(models.Model):
-    shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE, null=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
     image1 = models.ImageField(upload_to='products')
     image2 = models.ImageField(upload_to='products', blank=True, null=True)
     image3 = models.ImageField(upload_to='products', blank=True, null=True)
     image4 = models.ImageField(upload_to='products', blank=True, null=True)
     image5 = models.ImageField(upload_to='products', blank=True, null=True)
     image6 = models.ImageField(upload_to='products', blank=True, null=True)
-    payment_link = models.CharField(max_length=200)
+    payment_link = models.CharField(max_length=200, null=True, blank=True)
     name = models.CharField(max_length=100)
     price = models.PositiveIntegerField()
     last_price = models.PositiveIntegerField()
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
     first_page = models.BooleanField(default=True)

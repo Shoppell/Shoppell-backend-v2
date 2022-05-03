@@ -6,7 +6,7 @@ from user_auth.models import User
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Q
 from .models import Product, Shop, Category, SavedProduct, ShopComment, ProductComment
-
+from django.contrib.postgres.search import TrigramSimilarity
 class SavedProductCreate(generics.GenericAPIView):
  
     def post(self, request, *args, **kwargs):
@@ -106,20 +106,22 @@ class CategoryRUD(generics.RetrieveUpdateDestroyAPIView):
 class ProductSearch(generics.GenericAPIView):
     serializer_class = ProductSearchSeralizer
 
-    def get(self, request, *args,  **kwargs):
+    def post(self, request, *args,  **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        search = serializer.data["name"]        
-        queryset = Product.objects.get(name__contains=search)
-        return Response(ProductSerializer(queryset).data)
+        search = serializer.data["name"]       
+        queryset = Product.objects.annotate(
+        similarity=TrigramSimilarity('name', search)).filter(similarity__gt=0.3).order_by('-similarity')
+        return Response(ProductSerializer(queryset, many=True).data)
         
 
 class ShopSearch(generics.GenericAPIView):
     serializer_class = ShopSearchSeralizer
 
-    def get(self, request, *args,  **kwargs):
+    def post(self, request, *args,  **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         search = serializer.data["name"]        
-        queryset = Shop.objects.get(name__contains=search)
-        return Response(ShopSerializer(queryset).data)
+        queryset = Shop.objects.annotate(
+        similarity=TrigramSimilarity('name', search)).filter(similarity__gt=0.3).order_by('-similarity')
+        return Response(ShopSerializer(queryset, many=True).data)
