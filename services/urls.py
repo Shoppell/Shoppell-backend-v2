@@ -2,6 +2,7 @@ from django.urls import path
 from services import api
 
 urlpatterns = [
+
     # SmsPack
     path('sms-pack/create/', api.SmsPackCreate.as_view()),
     path('sms-pack/rud/<int:pk>', api.SmsPackRUD.as_view()),
@@ -54,5 +55,5 @@ urlpatterns = [
     path('used-sms/create/', api.UsedSmsCreate.as_view()),
     path('used-sms/rud/<int:pk>', api.UsedSmsRUD.as_view()),
     path('used-sms/list', api.UsedSmsList.as_view()),
-
+    
 ]

@@ -116,6 +116,7 @@ class Ticket(models.Model):
     description = models.TextField()
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+    answer = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.title +" "+ self.user.mobile
@@ -129,22 +130,20 @@ class IPAddress(models.Model):
         return self.ip_address
 
 class DailyProductView(models.Model):
-    user_ip = models.ForeignKey(IPAddress, on_delete=models.SET_NULL, null=True)
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     view = models.PositiveIntegerField(default=0)
     date = models.DateField(auto_now_add=True, null=True, blank=True)
 
     def __str__(self):
-        return self.user_ip
+        return self.product.name
 
 class DailyShopView(models.Model):
-    user_ip = models.ForeignKey(IPAddress, on_delete=models.SET_NULL, null=True)
     shop = models.ForeignKey(Shop, on_delete=models.SET_NULL, null=True)
     view = models.PositiveIntegerField(default=0)
     date = models.DateField(auto_now_add=True, null=True, blank=True)
 
     def __str__(self):
-        return self.user_ip
+        return self.shop.name
 
 #   ip_address = request.user.ip_address
 #     if ip_address not in shop.hits.all():
@@ -156,16 +155,24 @@ class CartBanner(models.Model):
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
+    def __str__(self):
+        return self.user.mobile 
 class CartSms(models.Model):
     sms_pack = models.ForeignKey(SmsPack, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
+    def __str__(self):
+        return self.user.mobile 
+
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    sms_packs = models.ManyToManyField(CartSms)
-    banner_packs = models.ManyToManyField(CartBanner)
+    sms_packs = models.ManyToManyField(CartSms, blank=True)
+    banner_packs = models.ManyToManyField(CartBanner, blank=True)
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
     paid = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.user.mobile 
