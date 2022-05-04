@@ -11,6 +11,14 @@ urlpatterns = [
     path('banner-pack/create/', api.BannerPackCreate.as_view()),
     path('banner-pack/rud/<int:pk>', api.BannerPackRUD.as_view()),
     path('banner-pack/list', api.BannerPackList.as_view()),
+    # Recommended-Product-Pack
+    path('product-pack/create/', api.RecommendedProductPackCreate.as_view()),
+    path('product-pack/rud/<int:pk>', api.RecommendedProductPackRUD.as_view()),
+    path('product-pack/list', api.RecommendedProductPackList.as_view()),
+    # Recommended-Shop-Pack
+    path('shop-pack/create/', api.RecommendedShopPackCreate.as_view()),
+    path('shop-pack/rud/<int:pk>', api.RecommendedShopPackRUD.as_view()),
+    path('shop-pack/list', api.RecommendedShopPackList.as_view()),
     # ReportProduct
     path('report-product/create/', api.ReportProductCreate.as_view()),
     path('report-product/rud/<int:pk>', api.ReportProductRUD.as_view()),

@@ -1,8 +1,71 @@
 from rest_framework import generics, permissions, mixins, status
 from rest_framework.response import Response
-from .models import SmsPack, BannerPack, ReportProduct, ReportShop, Ticket, IPAddress, DailyProductView, DailyShopView, CartBanner, CartSms, Order, UsedBanner, UsedSms
-from .serializer import SmsPackSerializer, BannerPackSerializer, ReportProductSerializer, ReportShopSerializer, TicketSerializer, IPAddressSerializer, DailyProductViewSerializer, DailyShopViewSerializer, CartBannerSerializer, CartSmsSerializer, OrderSerializer, UsedBannerSerializer, UsedSmsSerializer
+from .models import(
+    SmsPack,
+    BannerPack,
+    ReportProduct,
+    ReportShop,
+    Ticket,
+    IPAddress,
+    DailyProductView,
+    DailyShopView,
+    CartBanner,
+    CartSms,
+    Order,
+    UsedBanner,
+    UsedSms,
+    RecommendedProductPack, 
+    RecommendedShopPack, 
+    CartRecommendedProduct,
+    CartRecommendedShop, 
+    UsedRecommendedProduct, 
+    UsedRecommendedShop,
+)
+from .serializer import(
+    SmsPackSerializer,
+    BannerPackSerializer,
+    ReportProductSerializer,
+    ReportShopSerializer,
+    TicketSerializer,
+    IPAddressSerializer,
+    DailyProductViewSerializer,
+    DailyShopViewSerializer,
+    CartBannerSerializer,
+    CartSmsSerializer,
+    OrderSerializer,
+    UsedBannerSerializer,
+    UsedSmsSerializer,
+    RecommendedProductSerializer, 
+    RecommendedShopPackSerializer, 
+    CartRecommendedProductSerializer, 
+    CartRecommendedShopSerializer, 
+    UsedRecommendedProductSerializer, 
+    UsedRecommendedShopSerializer,
+)
 
+class RecommendedShopPackCreate(generics.CreateAPIView):
+    serializer_class = RecommendedShopPackSerializer
+    permission_classes = []
+
+class RecommendedShopPackList(generics.ListAPIView):
+    queryset = SmsPack.objects.all()
+    serializer_class = RecommendedShopPackSerializer
+
+class RecommendedShopPackRUD(generics.RetrieveUpdateDestroyAPIView):
+    queryset = RecommendedShopPack.objects.all()
+    serializer_class = RecommendedShopPackSerializer
+
+class RecommendedProductPackCreate(generics.CreateAPIView):
+    serializer_class = RecommendedProductSerializer
+    permission_classes = []
+
+class RecommendedProductPackList(generics.ListAPIView):
+    queryset = SmsPack.objects.all()
+    serializer_class = RecommendedProductSerializer
+
+class RecommendedProductPackRUD(generics.RetrieveUpdateDestroyAPIView):
+    queryset = RecommendedProductPack.objects.all()
+    serializer_class = RecommendedProductSerializer
 
 class SmsPackCreate(generics.CreateAPIView):
     serializer_class = SmsPackSerializer
@@ -120,6 +183,40 @@ class DailyShopViewRUD(generics.RetrieveUpdateDestroyAPIView):
     queryset = DailyShopView.objects.all()
     serializer_class = DailyShopViewSerializer
 
+
+class CartRecommendedShopCreate(generics.CreateAPIView):
+
+    def post(self, request, *args, **kwargs):
+        serializer = CartRecommendedShopSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        new_serializer = serializer.save(user=request.user)
+        return Response(CartRecommendedShopSerializer(new_serializer).data)
+
+class CartRecommendedShopList(generics.ListAPIView):
+    queryset = CartRecommendedShop.objects.all()
+    serializer_class = CartRecommendedShopSerializer
+
+class CartRecommendedShopRUD(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CartRecommendedShop.objects.all()
+    serializer_class = CartRecommendedShopSerializer
+
+class CartRecommendedProductCreate(generics.CreateAPIView):
+
+    def post(self, request, *args, **kwargs):
+        serializer = CartRecommendedProductSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        new_serializer = serializer.save(user=request.user)
+        return Response(CartRecommendedProductSerializer(new_serializer).data)
+
+class CartRecommendedProductList(generics.ListAPIView):
+    queryset = CartRecommendedProduct.objects.all()
+    serializer_class = CartRecommendedProductSerializer
+
+class CartRecommendedProductRUD(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CartRecommendedProduct.objects.all()
+    serializer_class = CartRecommendedProductSerializer
+
+
 class CartBannerCreate(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
@@ -129,7 +226,7 @@ class CartBannerCreate(generics.CreateAPIView):
         return Response(CartBannerSerializer(new_serializer).data)
 
 class CartBannerList(generics.ListAPIView):
-    queryset = Ticket.objects.all()
+    queryset = CartBanner.objects.all()
     serializer_class = CartBannerSerializer
 
 class CartBannerRUD(generics.RetrieveUpdateDestroyAPIView):
@@ -168,6 +265,38 @@ class OrderRUD(generics.RetrieveUpdateDestroyAPIView):
     queryset =  Order.objects.all()
     serializer_class =  OrderSerializer
     
+class UsedRecommendedProductCreate(generics.CreateAPIView):
+
+    def post(self, request, *args, **kwargs):
+        serializer = UsedRecommendedProductSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        new_serializer = serializer.save(user=request.user)
+        return Response(UsedRecommendedProductSerializer(new_serializer).data)
+
+class UsedRecommendedProductList(generics.ListAPIView):
+    queryset = UsedRecommendedProduct.objects.all()
+    serializer_class = UsedRecommendedProductSerializer
+
+class UsedRecommendedProductRUD(generics.RetrieveUpdateDestroyAPIView):
+    queryset = UsedRecommendedProduct.objects.all()
+    serializer_class =  UsedRecommendedProductSerializer
+    
+class UsedRecommendedShopCreate(generics.CreateAPIView):
+
+    def post(self, request, *args, **kwargs):
+        serializer = UsedRecommendedShopSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        new_serializer = serializer.save(user=request.user)
+        return Response(UsedRecommendedShopSerializer(new_serializer).data)
+
+class UsedRecommendedShopList(generics.ListAPIView):
+    queryset = UsedRecommendedShop.objects.all()
+    serializer_class = UsedRecommendedShopSerializer
+
+class UsedRecommendedShopRUD(generics.RetrieveUpdateDestroyAPIView):
+    queryset = UsedRecommendedShop.objects.all()
+    serializer_class = UsedRecommendedShopSerializer
+
 class UsedBannerCreate(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
