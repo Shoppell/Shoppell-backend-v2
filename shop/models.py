@@ -24,7 +24,8 @@ def resize(nameOfFile):
 
 
 class Shop(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owner")
+    admins = models.ManyToManyField(User, blank=True, related_name="admins")
     image = models.ImageField(upload_to='shops')
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, blank=False)
@@ -151,3 +152,11 @@ class ShopComment(models.Model):
             self.is_bad = False
         super().save(*args, **kwargs)
 
+class FavoriteShop(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    def __str__(self):
+        return self.shop.name +" "+ self.user.mobile

@@ -51,6 +51,14 @@ urlpatterns = [
     path('cart-sms/create/', api.CartSmsCreate.as_view()),
     path('cart-sms/rud/<int:pk>', api.CartSmsRUD.as_view()),
     path('cart-sms/list', api.CartSmsList.as_view()),
+    # CartRecommended-Shop
+    path('cart-shop/create/', api.CartRecommendedProductCreate.as_view()),
+    path('cart-shop/rud/<int:pk>', api.CartRecommendedProductRUD.as_view()),
+    path('cart-shop/list', api.CartRecommendedProductList.as_view()),
+    # CartRecommended-Product
+    path('cart-product/create/', api.CartSmsCreate.as_view()),
+    path('cart-product/rud/<int:pk>', api.CartSmsRUD.as_view()),
+    path('cart-product/list', api.CartSmsList.as_view()),
     # Order
     path('order/create/', api.OrderCreate.as_view()),
     path('order/rud/<int:pk>', api.OrderRUD.as_view()),
@@ -63,5 +71,13 @@ urlpatterns = [
     path('used-sms/create/', api.UsedSmsCreate.as_view()),
     path('used-sms/rud/<int:pk>', api.UsedSmsRUD.as_view()),
     path('used-sms/list', api.UsedSmsList.as_view()),
-    
+    # UsedRecommended-Product
+    path('used-product/create/', api.UsedRecommendedProductCreate.as_view()),
+    path('used-product/rud/<int:pk>', api.UsedRecommendedProductRUD.as_view()),
+    path('used-product/list', api.UsedRecommendedProductList.as_view()),
+    # UsedRecommended-Shop
+    path('used-shop/create/', api.UsedRecommendedShopCreate.as_view()),
+    path('used-shop/rud/<int:pk>', api.UsedRecommendedShopRUD.as_view()),
+    path('used-shop/list', api.UsedRecommendedShopList.as_view()),
+
 ]
