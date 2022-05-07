@@ -6,9 +6,9 @@ from .models import User
 class MobileBackend(ModelBackend):
 
     def authenticate(self, request, username=None, password=None, **kwargs):
-        if 'mobile' in kwargs:
-            mobile = kwargs['mobile']
+        if 'phone' in kwargs:
+            phone = kwargs['phone']
             try:
-                user = User.objects.get(mobile=mobile)
+                user = User.objects.get(phone=phone)
             except User.DoesNotExist:
                 pass

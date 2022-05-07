@@ -7,26 +7,26 @@ from melipayamak import Api
 username = '09930731973'
 password = 'D9HTC'
 
-def send_otp(mobile, otp): 
+def send_verifyCode(phone, verifyCode): 
     api = Api(username, password)
     sms_rest = api.sms()
-    text = [otp, ]
-    to = mobile
-    bodyId = 84130
+    text = [verifyCode, ]
+    to = phone
+    bodyId = 84141
     sms_rest.send_by_base_number(text, to, bodyId)
 
 
-def otp_generator():
+def verifyCode_generator():
     return randint(1000, 9999)
 
 
-def check_otp_expiration(mobile):
+def check_verifyCode_expiration(phone):
     try:
-        user = User.objects.get(mobile=mobile)
+        user = User.objects.get(phone=phone)
         now = timezone.now()
-        otp_time = user.otp_create_time
-        otp_after = otp_time + timedelta(seconds=180)
-        if now > otp_after:
+        verifyCode_time = user.verifyCode_create_time
+        verifyCode_after = verifyCode_time + timedelta(seconds=180)
+        if now > verifyCode_after:
             return False
         return True
 

@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'corsheaders',
     # package
     'rest_framework',
     'django_cleanup.apps.CleanupConfig',
@@ -77,6 +77,7 @@ SIMPLE_JWT = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -84,6 +85,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # ip saver 
     'services.middleware.SaveIpAddressMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5000',
+    'http://192.168.100.4:3000',
 ]
 
 ROOT_URLCONF = 'shoppell.urls'

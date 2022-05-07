@@ -1,0 +1,8 @@
+- model: user_auth.User
+  pk: 3
+  fields:
+    first_name: "first_name"
+    last_name: "last_name"
+    email: "normal.user@gmail.com"
+    mobile: "09930731973"
+    

@@ -3,15 +3,15 @@ from django.contrib.auth.base_user import BaseUserManager
 
 class MyUserManager(BaseUserManager):
 
-    def create_user(self, mobile, password=None, **other_fields):
-        if not mobile:
-            raise ValueError("mobile is required!")
-        user = self.model(mobile=mobile, **other_fields)
+    def create_user(self, phone, password=None, **other_fields):
+        if not phone:
+            raise ValueError("phone is required!")
+        user = self.model(phone=phone, **other_fields)
         user.set_password(password)
         user.save()
         return user
 
-    def create_superuser(self, mobile, password=None, **other_fields):
+    def create_superuser(self, phone, password=None, **other_fields):
         other_fields.setdefault('is_staff', True)
 
         other_fields.setdefault('is_superuser', True)
@@ -21,5 +21,5 @@ class MyUserManager(BaseUserManager):
             raise ValueError('Superuser must have is_staff=True')
         if other_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True')
-        return self.create_user(mobile, password, **other_fields)
+        return self.create_user(phone, password, **other_fields)
 

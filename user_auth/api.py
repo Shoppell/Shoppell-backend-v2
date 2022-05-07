@@ -16,7 +16,7 @@ import logging
 from rest_framework.views import APIView
 # def callback_gateway_shop(request):
 #     
-
+from django.contrib.sessions.backends.db import SessionStore
 
 class CallbackGatewayShop(APIView):
 
@@ -85,7 +85,7 @@ class GoToGatewayShop(generics.GenericAPIView):
         # serializer = self.get_serializer(data=request.data)
         # serializer.is_valid(raise_exception=True)
         # mobile = request.session['user_mobile']
-        # otp = serializer.data['otp']
+        # verifyCode = serializer.data['verifyCode']
         # response = Response()
 
 
@@ -102,13 +102,13 @@ class LoginApi(generics.GenericAPIView):
         refresh = RefreshToken.for_user(user)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        mobile = request.session['user_mobile']
-        otp = serializer.data['otp']
+        verifyCode = serializer.data['verifyCode']
+        phone = serializer.data['phone']
         response = Response()
         try:
-            user = User.objects.get(mobile=mobile)
-            if user.otp == otp:
-                user.otp = None
+            user = User.objects.get(phone=phone)
+            if user.verifyCode == verifyCode:
+                user.verifyCode = None
                 user.last_login = timezone.now()
                 user.save()
                 refresh = RefreshToken.for_user(user)
@@ -120,9 +120,9 @@ class LoginApi(generics.GenericAPIView):
                 response.data = {"refresh" : str(refresh),"access":str(refresh.access_token)}
                 return response
             else:
-                return Response({"No User" : "Invalid otp OR No any active user found for given otp"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"No User" : "Invalid verifyCode OR No any active user found for given verifyCode"}, status=status.HTTP_400_BAD_REQUEST)
         except User.DoesNotExist:
-            return Response({"Time out" : "Given otp is expired!!"}, status=status.HTTP_408_REQUEST_TIMEOUT)
+            return Response({"Time out" : "Given verifyCode is expired!!"}, status=status.HTTP_408_REQUEST_TIMEOUT)
 
 
 class RegisterApi(generics.GenericAPIView):
@@ -131,21 +131,16 @@ class RegisterApi(generics.GenericAPIView):
     def post(self, request, *args,  **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        mobile = serializer.validated_data['mobile']
-        request.session['user_mobile'] = mobile
+        phone = serializer.validated_data['phone']
         try:
-            user = User.objects.get(mobile=mobile)
-            otp = helper.otp_generator()
-            helper.send_otp(mobile, otp)
-            user.otp = otp
-            user.otp_create_time = timezone.now
-            user.save()
-            return Response({
-                "message": "verify it",
-            })
+            user = User.objects.get(phone=phone)
         except User.DoesNotExist:
-            serializer.save()
-        
-            return Response({
+            user = User.objects.create(phone=phone)
+        verifyCode = helper.verifyCode_generator()
+        helper.send_verifyCode(phone, verifyCode)
+        user.verifyCode = verifyCode
+        user.verifyCode_create_time = timezone.now
+        user.save()
+        return Response({
                 "message": "User Created Successfully.  Now verify it",
-            })
+        })
