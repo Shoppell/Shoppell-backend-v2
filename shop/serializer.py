@@ -28,10 +28,15 @@ class ShopSearchSeralizer(serializers.Serializer):
 
 
 class ShopSerializer(serializers.ModelSerializer):
-
+    user = UserSerializer(read_only=True)
     class Meta:
         model = Shop
         fields = '__all__'
+        extra_kwargs = {
+            "id": {"read_only": True},
+            "user": {"read_only": True},
+        }
+
 
 class ProductSerializer(serializers.ModelSerializer):
     

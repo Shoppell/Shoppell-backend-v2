@@ -7,6 +7,7 @@ from user_auth.models import User
 from PIL import Image
 from persian_tools import digits, separator
 from shop.PersianSwear import PersianSwear
+import uuid
 
 choices_rate = (
     (1, 1),
@@ -24,11 +25,11 @@ def resize(nameOfFile):
 
 
 class Shop(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owner")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owner", blank=True, null=True)
     admins = models.ManyToManyField(User, blank=True, related_name="admins")
     image = models.ImageField(upload_to='shops')
     name = models.CharField(max_length=100)
-    slug = models.SlugField(unique=True, blank=False)
+    slug = models.SlugField(unique=True, default=uuid.uuid4)
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
     description = models.TextField(null=True, blank=True)
@@ -47,9 +48,12 @@ class Shop(models.Model):
             if x:
                 super().save(*args, **kwargs)
                 resize(x.path)
-        self.instagram_link = "https://www.instagram.com/"+ self.instagram_link+"/"
-        self.whatsapp_link = "https://wa.me/" + self.whatsapp_link 
-        self.telegram_link = "https://t.me/" + self.telegram_link
+        if self.instagram_link!=None:
+            self.instagram_link = "https://www.instagram.com/"+ self.instagram_link+"/"
+        if self.whatsapp_link!=None:
+            self.whatsapp_link = "https://wa.me/" + self.whatsapp_link 
+        if self.telegram_link!=None:
+            self.telegram_link = "https://t.me/" + self.telegram_link
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -83,24 +87,23 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     price = models.PositiveIntegerField()
     last_price = models.PositiveIntegerField()
+    off = models.IntegerField(default=0)
     description = models.TextField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
     first_page = models.BooleanField(default=True)
     priority = models.PositiveIntegerField(default=0)
-    is_hide = models.PositiveIntegerField(default=False)
+    is_hide = models.BooleanField(default=False)
     rating = models.DecimalField(default=0, max_digits=3, decimal_places=1)
-
 
     def save(self, *args, **kwargs):
         for x in [self.image1, self.image2, self.image3, self.image4, self.image5, self.image6 ]:
             if x:
                 super().save(*args, **kwargs)
                 resize(x.path)
-
-    def get_off(self):
-        return int(100*(self.last_price/self.price))
-
+        self.off = int(100*(self.last_price/self.price))
+        super().save(*args, **kwargs)
+        
     def __str__(self):
         return self.name
 

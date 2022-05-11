@@ -117,7 +117,10 @@ class LoginApi(generics.GenericAPIView):
                        value = str(refresh.access_token),
                 )
                 login(request, user)
-                response.data = {"refresh" : str(refresh),"access":str(refresh.access_token)}
+                owner = False
+                if request.user.is_shop_owner:
+                    owner = True
+                response.data = {"refresh" : str(refresh),"access":str(refresh.access_token), "owner":owner}
                 return response
             else:
                 return Response({"No User" : "Invalid verifyCode OR No any active user found for given verifyCode"}, status=status.HTTP_400_BAD_REQUEST)

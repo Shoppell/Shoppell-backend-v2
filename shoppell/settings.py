@@ -49,8 +49,6 @@ INSTALLED_APPS = [
     'azbankgateways',
     # database
     'django.contrib.postgres'
-  
-
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -116,17 +114,24 @@ WSGI_APPLICATION = 'shoppell.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql_psycopg2",
+#         "NAME": "test2",
+#         "USER": "postgres",
+#         "PASSWORD": "navid1381",
+#         "HOST": "localhost",
+#         # "PORT": os.environ.get("CORE_DATABASE_PORT", ""),
+#     }
+# }
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "test1",
-        "USER": "postgres",
-        "PASSWORD": "navid1381",
-        "HOST": "localhost",
-        # "PORT": os.environ.get("CORE_DATABASE_PORT", ""),
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'db3', # This is where you put the name of the db file. 
+                 # If one doesn't exist, it will be created at migration time.
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

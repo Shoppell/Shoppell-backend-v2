@@ -7,6 +7,10 @@ from rest_framework.permissions import IsAuthenticated
 from django.db.models import Q
 from .models import Product, Shop, Category, SavedProduct, ShopComment, ProductComment
 from django.contrib.postgres.search import TrigramSimilarity
+from rest_framework.views import APIView
+from django.db.models import Avg, Max, Min
+import random
+
 class SavedProductCreate(generics.GenericAPIView):
  
     def post(self, request, *args, **kwargs):
@@ -45,7 +49,6 @@ class ProductCommentCreate(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         serializer = ProductCommentSerializer(data=request.data)
-        print(serializer.initial_data)
         serializer.is_valid(raise_exception=True)
         new_serializer = serializer.save(user=request.user)
         return Response(ProductCommentSerializer(new_serializer).data)
@@ -60,33 +63,68 @@ class ProductCommentRUD(generics.RetrieveUpdateDestroyAPIView):
 
 
 class ProductCreate(generics.CreateAPIView):
-    serializer_class = ProductSerializer
     permission_classes = [IsAuthenticated]
 
+    def post(self, request, *args, **kwargs):
+        serializer = ShopCommentSerializer(data=request.data)
+        print(serializer.initial_data)
+        user = User.objects.get(phone=request.user.phone)
+        shop = Shop.objects.get(user=user)
+        serializer.is_valid(raise_exception=True)
+        new_serializer = serializer.save(shop=shop)
+        return Response(ShopCommentSerializer(new_serializer).data)
+
 class ProductList(generics.ListAPIView):
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().order_by('-priority')[0:100]
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        parameters = request.GET.dict()
+        all_products = Product.objects.all()
+        if "category" in parameters:
+            all_products = all_products.filter(category=parameters["category"])
+        elif "price" in parameters:
+            if parameters["price"]=="price":
+                all_products = all_products.order_by('price')
+            else:
+                all_products = all_products.order_by('-price')
+        elif "off" in parameters:
+            if parameters["off"]=="off":
+                all_products = all_products.order_by('off')
+            else:
+                all_products = all_products.order_by('-off')
+        all_products = all_products.order_by('-priority').order_by('?')[0:100]
+        return Response(ProductSerializer(all_products, many=True).data, status=200)
 
 class ProductRUD(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [IsAuthenticated]
 
-class ShopCreate(generics.CreateAPIView):
-    queryset = Shop.objects.all()
-    serializer_class = ShopSerializer
+    def post(self, request, *args, **kwargs):
+        serializer = ProductSerializer(data=request.data)
+        user = User.objects.get(phone=request.user.phone)
+        shop = Shop.objects.get(user=user)
+        serializer.is_valid(raise_exception=True)
+        new_serializer = serializer.save(shop=shop)
+        return Response(ProductSerializer(new_serializer).data)
+
+class ShopCreate(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
+    def post(self, request, *args, **kwargs):
+        serializer = ShopSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        new_serializer = serializer.save(user=request.user)
+        return Response(ShopSerializer(new_serializer).data)
+
 class ShopList(generics.ListAPIView):
-    queryset = Shop.objects.all()
+    queryset = Shop.objects.all().order_by('-priority')[0:100]
     serializer_class = ShopSerializer
-    permission_classes = [IsAuthenticated]
 
 class ShopRUD(generics.RetrieveUpdateDestroyAPIView):
     queryset = Shop.objects.all()
     serializer_class = ShopSerializer
-    # permission_classes = [IsAuthenticated]
 
 class CategoryCreate(generics.CreateAPIView):
     serializer_class = CategorySerializer
