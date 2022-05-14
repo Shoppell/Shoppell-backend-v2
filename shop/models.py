@@ -27,7 +27,8 @@ def resize(nameOfFile):
 class Shop(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owner", blank=True, null=True)
     admins = models.ManyToManyField(User, blank=True, related_name="admins")
-    image = models.ImageField(upload_to='shops')
+    image = models.ImageField(upload_to='shops', default='shops/image.jpg')
+    cover = models.ImageField(upload_to='cover', null=True, default='cover/cover.jpg')
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, default=uuid.uuid4)
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)

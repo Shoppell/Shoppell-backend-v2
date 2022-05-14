@@ -75,19 +75,21 @@ SIMPLE_JWT = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     # ip saver 
     'services.middleware.SaveIpAddressMiddleware',
 ]
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5000',
-    'http://192.168.100.4:3000',
+    'http://192.168.100.6:3001',
+    'http://192.168.100.5:5000',
+    'http://192.168.100.6:5000',
 ]
 
 ROOT_URLCONF = 'shoppell.urls'
@@ -128,7 +130,7 @@ WSGI_APPLICATION = 'shoppell.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db3', # This is where you put the name of the db file. 
+        'NAME': 'db4', # This is where you put the name of the db file. 
                  # If one doesn't exist, it will be created at migration time.
     }
 }
