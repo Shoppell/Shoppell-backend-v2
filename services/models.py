@@ -22,9 +22,7 @@ class CustomSms(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        print(self.phone)
-        res = send_custom_text(self.phone, self.text)
-        print(res)
+        send_custom_text(self.phone, self.text)
 
     def __str__(self):
         return self.text[0:10]

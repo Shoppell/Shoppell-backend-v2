@@ -14,6 +14,7 @@ from django.urls import reverse
 from azbankgateways import bankfactories, models as bank_models, default_settings as settings
 import logging
 from rest_framework.views import APIView
+import secrets
 # def callback_gateway_shop(request):
 #     
 from django.contrib.sessions.backends.db import SessionStore
@@ -73,21 +74,6 @@ class GoToGatewayShop(generics.GenericAPIView):
             # TODO: redirect to failed page.
             raise e
 
-    # amount = amount*10
-    # user_mobile_number = '+989112221234'  # اختیاری
-        
-    
-
-
-        # user = User.objects.first()
-        # refresh = RefreshToken.for_user(user)
-        # print(type(refresh))
-        # serializer = self.get_serializer(data=request.data)
-        # serializer.is_valid(raise_exception=True)
-        # mobile = request.session['user_mobile']
-        # verifyCode = serializer.data['verifyCode']
-        # response = Response()
-
 
 class UserRUD(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
@@ -125,7 +111,7 @@ class LoginApi(generics.GenericAPIView):
             else:
                 return Response({"No User" : "Invalid verifyCode OR No any active user found for given verifyCode"}, status=status.HTTP_400_BAD_REQUEST)
         except User.DoesNotExist:
-            return Response({"Time out" : "Given verifyCode is expired!!"}, status=status.HTTP_408_REQUEST_TIMEOUT)
+            return Response({"Not Found" : "No user with this number!!"}, status=status.HTTP_408_REQUEST_TIMEOUT)
 
 
 class RegisterApi(generics.GenericAPIView):
@@ -138,12 +124,12 @@ class RegisterApi(generics.GenericAPIView):
         try:
             user = User.objects.get(phone=phone)
         except User.DoesNotExist:
-            user = User.objects.create(phone=phone)
+            user = User.objects.create(phone=phone, password=secrets.token_urlsafe(10))
         verifyCode = helper.verifyCode_generator()
         helper.send_verifyCode(phone, verifyCode)
         user.verifyCode = verifyCode
         user.verifyCode_create_time = timezone.now
         user.save()
         return Response({
-                "message": "User Created Successfully.  Now verify it",
+                "message": "Ok, verify it",
         })
