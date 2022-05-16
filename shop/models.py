@@ -134,6 +134,10 @@ class ProductComment(models.Model):
             self.is_bad = True
         else:
             self.is_bad = False
+        num_comments = len(ProductComment.objects.filter(shop=self.product))
+        final_rating = (num_comments*self.product.rating + self.grade)/(num_comments+1)
+        self.product.rating = final_rating
+        self.product.save()
         super().save(*args, **kwargs)
 
 class ShopComment(models.Model):
@@ -156,7 +160,6 @@ class ShopComment(models.Model):
         num_comments = len(ShopComment.objects.filter(shop=self.shop))
         final_rating = (num_comments*self.shop.rating + self.grade)/(num_comments+1)
         self.shop.rating = final_rating
-        print(final_rating)
         self.shop.save()
         super().save(*args, **kwargs)
 
