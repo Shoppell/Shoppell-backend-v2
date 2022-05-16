@@ -1,6 +1,13 @@
 from django.contrib import admin
-from services.models import UsedSms, UsedBanner, BannerPack, SmsPack, CartSms, CartBanner,Order, ReportProduct, ReportShop, Ticket, IPAddress, DailyProductView, DailyShopView, RecommendedProductPack, RecommendedShopPack, CartRecommendedShop, CartRecommendedProduct, UsedRecommendedProduct, UsedRecommendedShop
+from services.models import(
+UsedSms, UsedBanner, BannerPack, SmsPack, CartSms,
+ CartBanner,Order, ReportProduct, ReportShop, Ticket,
+  IPAddress, DailyProductView, DailyShopView, RecommendedProductPack,
+ RecommendedShopPack, CartRecommendedShop, CartRecommendedProduct,
+  UsedRecommendedProduct, UsedRecommendedShop, CustomSms
+) 
 
+admin.site.register(CustomSms)
 admin.site.register(RecommendedProductPack)
 admin.site.register(RecommendedShopPack)
 admin.site.register(CartRecommendedProduct)

@@ -6,12 +6,28 @@ from django.forms import model_to_dict
 from user_auth.models import User
 from shop.models import Shop, Product
 from PIL import Image
+from .sms import send_custom_text
 
 def resize(nameOfFile):
     img = Image.open(nameOfFile)
     size = (200, int(img.size[1] * 200 / img.size[0]))
     img.resize(size, Image.ANTIALIAS).save(nameOfFile)
     img.save(nameOfFile)
+
+class CustomSms(models.Model):
+    phone = models.CharField(max_length=11, blank=False, null=True)
+    text = models.TextField(blank=False, null=True)
+    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        print(self.phone)
+        res = send_custom_text(self.phone, self.text)
+        print(res)
+
+    def __str__(self):
+        return self.text[0:10]
 
 class SmsPack(models.Model):
     image = models.ImageField(upload_to='sms-pack')
@@ -199,7 +215,7 @@ class Order(models.Model):
         return self.user.mobile 
 
 class UsedSms(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="user_used_sms")
     user_mobile = models.CharField(max_length=20, blank=True, null=True)
     text = models.TextField()
     to_users = models.ManyToManyField(User, related_name="sms_receiver")

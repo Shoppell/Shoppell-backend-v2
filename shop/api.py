@@ -1,7 +1,12 @@
 from email.policy import HTTP
 from rest_framework import generics, permissions, mixins, status
 from rest_framework.response import Response
-from .serializer import ShopSerializer, ProductSerializer, CategorySerializer, ProductSearchSeralizer, ShopSearchSeralizer, SavedProductSerializer, ShopCommentSerializer, ProductCommentSerializer
+from .serializer import(
+ShopSerializer, ProductSerializer, CategorySerializer,
+ ProductSearchSeralizer, ShopSearchSeralizer, SavedProductSerializer,
+  ShopCommentSerializer, ProductCommentSerializer,
+  ProductShowSerializer
+) 
 from user_auth.models import User
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Q
@@ -32,7 +37,6 @@ class ShopCommentCreate(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         serializer = ShopCommentSerializer(data=request.data)
-        print(serializer.initial_data)
         serializer.is_valid(raise_exception=True)
         new_serializer = serializer.save(user=request.user)
         return Response(ShopCommentSerializer(new_serializer).data)
@@ -126,6 +130,15 @@ class ShopRUD(generics.RetrieveUpdateDestroyAPIView):
     queryset = Shop.objects.all()
     serializer_class = ShopSerializer
 
+class ShopProductList(generics.GenericAPIView):
+     
+    def get(self, request, *args,  **kwargs):
+        pk = kwargs["pk"]
+        shop = Shop.objects.filter(pk=pk).first()
+        products = Product.objects.filter(shop=shop)
+        serializer = ProductShowSerializer(products, many=True)
+        return Response(serializer.data)
+
 class CategoryCreate(generics.CreateAPIView):
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticated]
@@ -150,7 +163,6 @@ class ProductSearch(generics.GenericAPIView):
         queryset = Product.objects.annotate(
         similarity=TrigramSimilarity('name', search)).filter(similarity__gt=0.3).order_by('-similarity')
         return Response(ProductSerializer(queryset, many=True).data)
-        
 
 class ShopSearch(generics.GenericAPIView):
     serializer_class = ShopSearchSeralizer

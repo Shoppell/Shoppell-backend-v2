@@ -23,7 +23,6 @@ def resize(nameOfFile):
     img.resize(size, Image.ANTIALIAS).save(nameOfFile)
     img.save(nameOfFile)
 
-
 class Shop(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owner", blank=True, null=True)
     admins = models.ManyToManyField(User, blank=True, related_name="admins")
@@ -115,7 +114,7 @@ class SavedProduct(models.Model):
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
-        return self.product.name +" "+ self.user.mobile
+        return self.product.name +" "+ self.user.phone
 
 class ProductComment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -127,7 +126,7 @@ class ProductComment(models.Model):
     is_bad = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.product.name +" "+ self.user.mobile
+        return self.product.name +" "+ self.user.phone
 
     def save(self, *args, **kwargs):
         persianswear = PersianSwear()
@@ -146,7 +145,7 @@ class ShopComment(models.Model):
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
-        return self.shop.name +" "+ self.user.mobile
+        return self.shop.name +" "+ self.user.phone
     
     def save(self, *args, **kwargs):
         persianswear = PersianSwear()
@@ -154,6 +153,11 @@ class ShopComment(models.Model):
             self.is_bad = True
         else:
             self.is_bad = False
+        num_comments = len(ShopComment.objects.filter(shop=self.shop))
+        final_rating = (num_comments*self.shop.rating + self.grade)/(num_comments+1)
+        self.shop.rating = final_rating
+        print(final_rating)
+        self.shop.save()
         super().save(*args, **kwargs)
 
 class FavoriteShop(models.Model):
@@ -163,4 +167,4 @@ class FavoriteShop(models.Model):
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
-        return self.shop.name +" "+ self.user.mobile
+        return self.shop.name +" "+ self.user.phone

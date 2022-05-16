@@ -39,10 +39,15 @@ class ShopSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    
     class Meta:
         model = Product
         fields = '__all__'
+
+
+class ProductShowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['name', 'price','image1', 'last_price', 'off', 'category', 'rating']
 
 class CategorySerializer(serializers.ModelSerializer):
     

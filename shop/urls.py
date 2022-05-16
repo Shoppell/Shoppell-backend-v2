@@ -10,6 +10,7 @@ urlpatterns = [
     # shop
     path('shop/create/', api.ShopCreate.as_view()),
     path('shop/rud/<int:pk>', api.ShopRUD.as_view()),
+    path('shop/productlist/<int:pk>', api.ShopProductList.as_view()),
     path('shop/list', api.ShopList.as_view()),
     path('shop/search', api.ShopSearch.as_view()),
     # category
