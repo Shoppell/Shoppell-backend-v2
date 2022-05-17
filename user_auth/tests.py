@@ -20,14 +20,14 @@ class UserTest(ShoppellTestCase):
         }
         response = self.client.post(reverse("user_auth:register"), data=user_data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        user = User.objects.filter().first()
+        self.assertEqual("09930731973", User.objects.filter().first().phone)
 
     # this test must run with top test
     def test_verify_user(self):
-        user = User.objects.filter().first()
         user_data = {
-            "verifyCode": user.verifyCode,
+            "verifyCode": 1243,
             "phone": str(user.phone),
         }
         response = self.client.post(reverse("user_auth:verify"), data=user_data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(User.objects.filter().first().verifyCode, 1243)

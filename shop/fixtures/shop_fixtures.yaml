@@ -1,0 +1,8 @@
+- model: shop.Shop
+  pk: 2
+  fields:
+    name: "shop1"
+    slug: "shop1_slug"
+    
+
+    

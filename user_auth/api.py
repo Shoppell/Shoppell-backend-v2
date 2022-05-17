@@ -60,7 +60,7 @@ class GoToGatewayShop(generics.GenericAPIView):
             bank.set_request(request)
             bank.set_amount(amount)
             # یو آر ال بازگشت به نرم افزار برای ادامه فرآیند
-            bank.set_client_callback_url(reverse('callback'))
+            bank.set_client_callback_url(reverse('user_auth:callback'))
             # bank.set_mobile_number(user_mobile_number)  # اختیاری
         
             # در صورت تمایل اتصال این رکورد به رکورد فاکتور یا هر چیزی که بعدا بتوانید ارتباط بین محصول یا خدمات را با این

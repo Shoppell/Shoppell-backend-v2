@@ -113,6 +113,24 @@ TEMPLATES = [
 WSGI_APPLICATION = 'shoppell.wsgi.application'
 
 
+AZ_IRANIAN_BANK_GATEWAYS = {
+   'GATEWAYS': {
+       'ZARINPAL': {
+           'MERCHANT_CODE': '15c630de-d437-49fb-bdf5-86f7282cca67',
+       },
+   },
+   'IS_SAMPLE_FORM_ENABLE': True, # اختیاری و پیش فرض غیر فعال است
+   'DEFAULT': 'BMI',
+   'CURRENCY': 'IRR', # اختیاری
+   'TRACKING_CODE_QUERY_PARAM': 'tc', # اختیاری
+   'TRACKING_CODE_LENGTH': 16, # اختیاری
+   'SETTING_VALUE_READER_CLASS': 'azbankgateways.readers.DefaultReader', # اختیاری
+   'BANK_PRIORITIES': [
+       'ZARINPAL',
+       # and so on ...
+   ], # اختیاری
+}
+
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
