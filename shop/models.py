@@ -8,6 +8,16 @@ from PIL import Image
 from persian_tools import digits, separator
 from shop.PersianSwear import PersianSwear
 import uuid
+import pytz
+import datetime
+
+def time_seprator():
+    tz = pytz.timezone('Asia/Tehran')
+    datem = datetime.datetime.strptime(tz, "%Y-%m-%d %H:%M:%S")
+    print(datem.day)        # 25
+    print(datem.month)      # 5
+    print(datem.year) 
+    return datem
 
 choices_rate = (
     (1, 1),

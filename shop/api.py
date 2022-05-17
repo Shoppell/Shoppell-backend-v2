@@ -70,13 +70,12 @@ class ProductCreate(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        serializer = ShopCommentSerializer(data=request.data)
-        print(serializer.initial_data)
+        serializer = ProductSerializer(data=request.data)
         user = User.objects.get(phone=request.user.phone)
         shop = Shop.objects.get(user=user)
         serializer.is_valid(raise_exception=True)
         new_serializer = serializer.save(shop=shop)
-        return Response(ShopCommentSerializer(new_serializer).data)
+        return Response(ProductSerializer(new_serializer).data)
 
 class ProductList(generics.ListAPIView):
     queryset = Product.objects.all().order_by('-priority')[0:100]

@@ -4,8 +4,8 @@ from shop import api
 app_name = 'shop'
 
 urlpatterns = [
-   # product
-    path('product/create/', api.ProductCreate.as_view()),
+    # product
+    path('product/create/', api.ProductCreate.as_view(), name="product_create"),
     path('product/rud/<int:pk>', api.ProductRUD.as_view()),
     path('product/list', api.ProductList.as_view()),
     path('product/search', api.ProductSearch.as_view()),

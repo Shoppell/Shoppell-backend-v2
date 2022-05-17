@@ -1,8 +1,23 @@
 - model: shop.Shop
   pk: 2
   fields:
+    user: 3
     name: "shop1"
     slug: "shop1_slug"
-    
+    image: "shops/23.jpg"
 
-    
+- model: shop.Category
+  pk: 3
+  fields:
+    name: "shop1"
+    image: "shops/23.jpg"
+
+- model: shop.Product
+  pk: 1
+  fields:
+    name: "product1"
+    image1: "shops/23.jpg"
+    shop: 2
+    category: 3
+    price: 1000
+    last_price: 800
