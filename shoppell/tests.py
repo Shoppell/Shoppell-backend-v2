@@ -21,7 +21,7 @@ class ShoppellTestCase(APITestCase):
     fixtures = [USER_FIXTURE_ADDRESS]
     client_username: Optional[str] = "user_test"
 
-    def setUp(self) -> None:
-        if USER_FIXTURE_ADDRESS in self.fixtures and self.client_username:
-            self.user = User.objects.get(username=self.client_username)
-            self.client.credentials(user=self.user)
+    # def setUp(self) -> None:
+    #     if USER_FIXTURE_ADDRESS in self.fixtures and self.client_username:
+    #         self.user = User.objects.get(username=self.client_username)
+    #         self.client.credentials(user=self.user)

@@ -4,5 +4,6 @@
     first_name: "first_name"
     last_name: "last_name"
     email: "normal.user@gmail.com"
-    mobile: "09930731973"
+    phone: "09930731973"
+    verifyCode: 0
     

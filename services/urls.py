@@ -1,12 +1,13 @@
 from django.urls import path
 from services import api
 
-urlpatterns = [
+app_name = 'services'
 
+urlpatterns = [
     # SmsPack
-    path('sms-pack/create/', api.SmsPackCreate.as_view()),
-    path('sms-pack/rud/<int:pk>', api.SmsPackRUD.as_view()),
-    path('sms-pack/list', api.SmsPackList.as_view()),
+    path('sms-pack/create/', api.SmsPackCreate.as_view(), name="sms_pack_create"),
+    path('sms-pack/rud/<int:pk>', api.SmsPackRUD.as_view(), name="sms_pack_rud"),
+    path('sms-pack/list', api.SmsPackList.as_view(), name="sms_pack_list"),
     # BannerPack
     path('banner-pack/create/', api.BannerPackCreate.as_view()),
     path('banner-pack/rud/<int:pk>', api.BannerPackRUD.as_view()),
