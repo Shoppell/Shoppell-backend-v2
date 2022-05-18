@@ -6,11 +6,13 @@ app_name = 'shop'
 urlpatterns = [
     # product
     path('product/create/', api.ProductCreate.as_view(), name="product_create"),
+    path('product/read/<int:pk>', api.ProductRead.as_view()),
     path('product/rud/<int:pk>', api.ProductRUD.as_view()),
     path('product/list', api.ProductList.as_view()),
     path('product/search', api.ProductSearch.as_view()),
     # shop
     path('shop/create/', api.ShopCreate.as_view(), name="shop_create"),
+    path('shop/read/<int:pk>', api.ShopRead.as_view(), name="shop_rud"),
     path('shop/rud/<int:pk>', api.ShopRUD.as_view(), name="shop_rud"),
     path('shop/productlist/<int:pk>', api.ShopProductList.as_view(), name="shop_product_list"),
     path('shop/list', api.ShopList.as_view(), name="shop_list"),
@@ -26,10 +28,10 @@ urlpatterns = [
     # comment-shop
     path('comment-shop/create/', api.ShopCommentCreate.as_view()),
     path('comment-shop/rud/<int:pk>', api.ShopCommentRUD.as_view()),
-    path('comment-shop/list', api.ShopCommentList.as_view()),
+    path('comment-shop/list/<int:pk>', api.ShopCommentList.as_view()),
     # comment-product
     path('comment-product/create/', api.ProductCommentCreate.as_view()),
     path('comment-product/rud/<int:pk>', api.ProductCommentRUD.as_view()),
-    path('comment-product/list', api.ProductCommentList.as_view()),
+    path('comment-product/list/<int:pk>', api.ProductCommentList.as_view()),
     
 ]

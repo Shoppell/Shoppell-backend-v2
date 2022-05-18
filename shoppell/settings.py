@@ -177,6 +177,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
+APPEND_SLASH = False
 
 TIME_ZONE = 'Asia/Tehran'
 

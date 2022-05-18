@@ -1,6 +1,8 @@
+from asyncore import read
 from rest_framework import serializers
 from .models import Shop, Product, Category, SavedProduct, ProductComment, ShopComment
 from user_auth.serializer import UserSerializer
+
 
 class SavedProductSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
@@ -26,17 +28,17 @@ class ProductSearchSeralizer(serializers.Serializer):
 class ShopSearchSeralizer(serializers.Serializer):
     name = serializers.CharField(max_length=20)
 
-
 class ShopSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     class Meta:
         model = Shop
         fields = '__all__'
-        extra_kwargs = {
-            "id": {"read_only": True},
-            "user": {"read_only": True},
-        }
 
+class ShopShowSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    class Meta:
+        model = Shop
+        exclude = ['created', 'modified', 'evidence', 'is_ban']
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:

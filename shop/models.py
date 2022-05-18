@@ -34,10 +34,10 @@ def resize(nameOfFile):
     img.save(nameOfFile)
 
 class Shop(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owner", blank=True, null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="owner", blank=True, null=True)
     admins = models.ManyToManyField(User, blank=True, related_name="admins")
-    image = models.ImageField(upload_to='shops', default='shops/image.jpg')
-    cover = models.ImageField(upload_to='cover', null=True, default='cover/cover.jpg')
+    image = models.ImageField(upload_to='shops', default='default/shop.jpg', null=True)
+    cover = models.ImageField(upload_to='cover', default='default/cover.jpg', null=True)
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, default=uuid.uuid4)
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
@@ -54,10 +54,9 @@ class Shop(models.Model):
     is_ban = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
-        for x in [self.image, ]:
+        for x in [self.image, self.cover]:
             if x:
-                super().save(*args, **kwargs)
-                resize(x.path)
+                resize(x.path)           
         if self.instagram_link!=None:
             self.instagram_link = "https://www.instagram.com/"+ self.instagram_link+"/"
         if self.whatsapp_link!=None:
@@ -85,15 +84,14 @@ class Category(models.Model):
         return self.name
 
 class Product(models.Model):
-    shop = models.ForeignKey(Shop, on_delete=models.CASCADE, null=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
-    image1 = models.ImageField(upload_to='products')
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE, null=True, related_name="shopproduct")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    image1 = models.ImageField(upload_to='products', default='default/product.jpg', null=True)
     image2 = models.ImageField(upload_to='products', blank=True, null=True)
     image3 = models.ImageField(upload_to='products', blank=True, null=True)
     image4 = models.ImageField(upload_to='products', blank=True, null=True)
     image5 = models.ImageField(upload_to='products', blank=True, null=True)
     image6 = models.ImageField(upload_to='products', blank=True, null=True)
-    payment_link = models.CharField(max_length=200, null=True, blank=True)
     name = models.CharField(max_length=100)
     price = models.PositiveIntegerField()
     last_price = models.PositiveIntegerField()
@@ -109,9 +107,8 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         for x in [self.image1, self.image2, self.image3, self.image4, self.image5, self.image6 ]:
             if x:
-                super().save(*args, **kwargs)
                 resize(x.path)
-        self.off = int(100*(self.last_price/self.price))
+        self.off = 100-int(100*(self.last_price/self.price))
         super().save(*args, **kwargs)
         
     def __str__(self):
