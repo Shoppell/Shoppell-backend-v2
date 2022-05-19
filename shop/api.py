@@ -51,6 +51,7 @@ class ShopCommentCreate(generics.GenericAPIView):
         return Response(ShopCommentSerializer(new_serializer).data)
 
 class ShopCommentList(generics.ListAPIView):
+    queryset = ShopComment.objects.all()
 
     def get(self, request, *args, **kwargs):
         pk = kwargs['pk']
@@ -71,6 +72,7 @@ class ProductCommentCreate(generics.CreateAPIView):
         return Response(ProductCommentSerializer(new_serializer).data)
 
 class ProductCommentList(generics.ListAPIView):
+    queryset = ProductComment.objects.all()
 
     def get(self, request, *args, **kwargs):
         pk = kwargs['pk']
@@ -136,6 +138,7 @@ class ShopCreate(generics.GenericAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class ShopList(generics.GenericAPIView):
+    queryset = Shop.objects.all()
 
     def get(self, request, *args, **kwargs):
         return Response(ShopShowSerializer(Shop.objects.all().order_by('-priority')[0:20], many=True).data, status=status.HTTP_200_OK)
