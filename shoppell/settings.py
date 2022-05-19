@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'shop',
     'services',
     'instagram',
+    'cart',
+    'order',
+    'util',
     # bank
     'azbankgateways',
     # database

@@ -1,4 +1,4 @@
-from .models import IPAddress
+from util.models import IPAddress
 
 class SaveIpAddressMiddleware:
     def __init__(self, get_response):
