@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'user_auth',
     'shop',
     'services',
+    'instagram',
     # bank
     'azbankgateways',
     # database

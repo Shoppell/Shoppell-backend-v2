@@ -1,3 +1,4 @@
+# shop owner
 - model: user_auth.User
   pk: 3
   fields:
@@ -6,3 +7,23 @@
     email: "normal.user@gmail.com"
     phone: "09930731973"
     verifyCode: 1243
+
+# shop admin
+- model: user_auth.User
+  pk: 4
+  fields:
+    first_name: "first_name"
+    last_name: "last_name"
+    email: "normal.user@gmail.com"
+    phone: "09903552689"
+    verifyCode: 1243
+
+# simple user - not owner
+- model: user_auth.User
+  pk: 5
+  fields:
+    first_name: "first_name"
+    last_name: "last_name"
+    email: "normal.user@gmail.com"
+    phone: "09935143194"
+    verifyCode: 1244

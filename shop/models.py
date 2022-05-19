@@ -27,6 +27,12 @@ choices_rate = (
     (5, 5),
 )
 
+choices_evidence = (
+   ('instagram-owner', 'instagram-owner'),
+   ('valid-pay', 'valid-pay'),
+)
+
+
 def resize(nameOfFile):
     img = Image.open(nameOfFile)
     size = (200, int(img.size[1] * 200 / img.size[0]))
@@ -45,11 +51,6 @@ class Shop(models.Model):
     description = models.TextField(null=True, blank=True)
     is_verify = models.BooleanField(default=False)
     priority = models.PositiveIntegerField(default=0)
-    instagram_link = models.CharField(max_length=100, blank=True, null=True)
-    telegram_link = models.CharField(max_length=100, blank=True, null=True)
-    website_link = models.CharField(max_length=100, blank=True, null=True)
-    whatsapp_link = models.CharField(max_length=100, blank=True, null=True)
-    evidence = models.ImageField(upload_to='evidences', blank=True, null=True)
     rating = models.DecimalField(default=0, max_digits=3, decimal_places=1)
     is_ban = models.BooleanField(default=False)
 
@@ -68,9 +69,31 @@ class Shop(models.Model):
     def __str__(self):
         return self.name
 
+class SocialMedia(models.Model):
+    name = models.CharField(max_length=100)
+    icon = models.ImageField()
+    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+class SocialMediaLink(models.Model):
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
+    social_media = models.ForeignKey(SocialMedia, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    link = models.TextField()
+    hits = models.IntegerField(default=0)
+    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+class Evidence(models.Model):
+    type = models.CharField(choices=choices_evidence, max_length=100)
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
+    file = models.FileField()
+    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+
 class Category(models.Model):
     name = models.CharField(max_length=30)
-    image = models.ImageField(upload_to='products_category')
+    image = models.ImageField(upload_to='products_category', default='default/category.png', null=True)
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 

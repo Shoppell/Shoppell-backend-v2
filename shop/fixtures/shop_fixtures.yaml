@@ -4,20 +4,49 @@
     user: 3
     name: "shop1"
     slug: "shop1_slug"
-    image: "shops/23.jpg"
+    image: "default/shop.jpg"
 
 - model: shop.Category
   pk: 3
   fields:
     name: "shop1"
-    image: "shops/23.jpg"
+    image: "default/category.png"
 
 - model: shop.Product
   pk: 1
   fields:
     name: "product1"
-    image1: "shops/23.jpg"
+    image1: "default/product.jpg"
     shop: 2
     category: 3
     price: 1000
     last_price: 800
+
+- model: shop.SavedProduct
+  pk: 7
+  fields:
+    user: 3
+    product: 1
+
+- model: shop.ProductComment
+  pk: 8
+  fields:
+    user: 3
+    product: 1
+    description: "nice!"
+    grade: 2
+  
+- model: shop.ShopComment
+  pk: 8
+  fields:
+    user: 3
+    shop: 2
+    description: "not bad?!"
+    grade: 2
+
+- model: shop.FavoriteShop
+  pk: 8
+  fields:
+    user: 3
+    shop: 2
+    
