@@ -58,12 +58,6 @@ class Shop(models.Model):
         for x in [self.image, self.cover]:
             if x:
                 resize(x.path)           
-        if self.instagram_link!=None:
-            self.instagram_link = "https://www.instagram.com/"+ self.instagram_link+"/"
-        if self.whatsapp_link!=None:
-            self.whatsapp_link = "https://wa.me/" + self.whatsapp_link 
-        if self.telegram_link!=None:
-            self.telegram_link = "https://t.me/" + self.telegram_link
         super().save(*args, **kwargs)
 
     def __str__(self):
