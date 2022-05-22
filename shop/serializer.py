@@ -38,7 +38,7 @@ class ShopShowSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     class Meta:
         model = Shop
-        exclude = ['created', 'modified', 'evidence', 'is_ban']
+        exclude = ['created', 'modified', 'is_ban']
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
