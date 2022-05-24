@@ -146,6 +146,7 @@ class ShopList(generics.GenericAPIView):
 class ShopRead(generics.RetrieveUpdateDestroyAPIView):
     queryset = Shop.objects.all()
     serializer_class = ShopShowSerializer
+
 class ShopRUD(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated, ShopOwnerOnly]
     queryset = Shop.objects.all()
@@ -154,8 +155,7 @@ class ShopRUD(generics.RetrieveUpdateDestroyAPIView):
 class ShopProductList(generics.GenericAPIView):
      
     def get(self, request, *args,  **kwargs):
-        pk = kwargs["pk"]
-        shop = Shop.objects.filter(pk=pk).first()
+        shop = Shop.objects.filter(user=request.user).first()
         products = Product.objects.filter(shop=shop)
         serializer = ProductShowSerializer(products, many=True)
         return Response(serializer.data)

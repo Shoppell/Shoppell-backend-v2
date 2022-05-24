@@ -90,7 +90,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'http://192.168.100.4:3000',
+    'http://192.168.100.2:3000',
 ]
 
 ROOT_URLCONF = 'shoppell.urls'
