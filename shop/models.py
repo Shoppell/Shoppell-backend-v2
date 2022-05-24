@@ -54,11 +54,11 @@ class Shop(models.Model):
     rating = models.DecimalField(default=0, max_digits=3, decimal_places=1)
     is_ban = models.BooleanField(default=False)
 
-    def save(self, *args, **kwargs):
-        for x in [self.image, self.cover]:
-            if x:
-                resize(x.path)           
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     for x in [self.image, self.cover]:
+    #         if x:
+    #             resize(x.path)           
+    #     super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -122,9 +122,9 @@ class Product(models.Model):
     rating = models.DecimalField(default=0, max_digits=3, decimal_places=1)
 
     def save(self, *args, **kwargs):
-        for x in [self.image1, self.image2, self.image3, self.image4, self.image5, self.image6 ]:
-            if x:
-                resize(x.path)
+        # for x in [self.image1, self.image2, self.image3, self.image4, self.image5, self.image6 ]:
+        #     if x:
+        #         resize(x.path)
         self.off = 100-int(100*(self.last_price/self.price))
         super().save(*args, **kwargs)
         

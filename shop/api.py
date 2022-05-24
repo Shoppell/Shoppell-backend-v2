@@ -92,7 +92,7 @@ class ProductCreate(generics.CreateAPIView):
         shop = Shop.objects.get(user=request.user)
         serializer.is_valid(raise_exception=True)
         new_serializer = serializer.save(shop=shop)
-        return Response(ProductSerializer(new_serializer).data)
+        return Response(ProductSerializer(new_serializer).data, status=status.HTTP_201_CREATED)
 
 class ProductList(generics.ListAPIView):
     queryset = Product.objects.all().order_by('-priority')[0:100]
