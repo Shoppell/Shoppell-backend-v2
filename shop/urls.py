@@ -12,8 +12,9 @@ urlpatterns = [
     path('product/search', api.ProductSearch.as_view()),
     # shop
     path('shop/create/', api.ShopCreate.as_view(), name="shop_create"),
-    path('shop/read/<int:pk>', api.ShopRead.as_view(), name="shop_rud"),
-    path('shop/rud/<int:pk>', api.ShopRUD.as_view(), name="shop_rud"),
+    path('shop/read/<slug:slug>', api.ShopRead.as_view(), name="shop_rud"),
+    path('shop/rud/<slug:slug>', api.ShopRUD.as_view(), name="shop_rud"),
+    path('shop/productlist/<slug:slug>', api.ShopProductListUser.as_view(), name="shop_product_list_user"),
     path('shop/productlist', api.ShopProductList.as_view(), name="shop_product_list"),
     path('shop/list', api.ShopList.as_view(), name="shop_list"),
     path('shop/search', api.ShopSearch.as_view(), name="shop_search"),

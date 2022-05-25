@@ -56,6 +56,6 @@ class ProductShowSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
     class Meta:
         model = Product
-        fields = ['name', 'price','image1', 'last_price', 'off', 'rating', 'category']
-
+        fields = [ 'id', 'name', 'price','image1', 'last_price', 'off', 'rating', 'category']
+    
 

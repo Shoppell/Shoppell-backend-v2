@@ -143,10 +143,18 @@ class ShopList(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         return Response(ShopShowSerializer(Shop.objects.all().order_by('-priority')[0:20], many=True).data, status=status.HTTP_200_OK)
 
-class ShopRead(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Shop.objects.all()
-    serializer_class = ShopShowSerializer
+class ShopRead(generics.GenericAPIView):
 
+    def get(self, request, *args,  **kwargs):
+        slug = kwargs['slug']
+        shop = Shop.objects.filter(slug=slug).first()
+        products = Product.objects.filter(shop=shop)
+        # serializer = ProductShowSerializer(products, many=True)
+        serializer_shop = ShopShowSerializer(shop)
+        # data = serializer_shop.data
+        # data["products"] = serializer.data
+        return Response(serializer_shop.data)
+   
 class ShopRUD(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated, ShopOwnerOnly]
     queryset = Shop.objects.all()
@@ -156,6 +164,16 @@ class ShopProductList(generics.GenericAPIView):
      
     def get(self, request, *args,  **kwargs):
         shop = Shop.objects.filter(user=request.user).first()
+        products = Product.objects.filter(shop=shop)
+        serializer = ProductShowSerializer(products, many=True)
+        return Response(serializer.data)
+
+class ShopProductListUser(generics.GenericAPIView):
+    queryset = Product.objects.all()
+
+    def get(self, request, *args,  **kwargs):
+        slug = kwargs['slug']
+        shop = Shop.objects.filter(slug=slug).first()
         products = Product.objects.filter(shop=shop)
         serializer = ProductShowSerializer(products, many=True)
         return Response(serializer.data)
