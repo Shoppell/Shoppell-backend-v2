@@ -27,5 +27,6 @@ django-cleanup
 persian-tools
 django-cors-headers
 djangorestframework
-psycopg2
 djangorestframework-simplejwt
+encodings
+psycopg2-binary
