@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
+
 import os
 from pathlib import Path
 from datetime import timedelta, time
@@ -90,7 +91,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'http://192.168.213.100:3000',
+    'http://127.0.0.1:3000',
 ]
 
 ROOT_URLCONF = 'shoppell.urls'

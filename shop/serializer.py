@@ -1,4 +1,3 @@
-from asyncore import read
 from rest_framework import serializers
 from .models import Shop, Product, Category, SavedProduct, ProductComment, ShopComment
 from user_auth.serializer import UserSerializer

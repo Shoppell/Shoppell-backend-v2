@@ -1,3 +1,4 @@
+from email.mime import image
 from statistics import mode
 from traceback import print_tb
 from django.db import models
@@ -10,6 +11,9 @@ from shop.PersianSwear import PersianSwear
 import uuid
 import pytz
 import datetime
+from django.core.files.temp import NamedTemporaryFile
+from urllib.request import urlopen
+from django.core.files import File
 
 def time_seprator():
     tz = pytz.timezone('Asia/Tehran')
@@ -53,6 +57,16 @@ class Shop(models.Model):
     priority = models.PositiveIntegerField(default=0)
     rating = models.DecimalField(default=0, max_digits=3, decimal_places=1)
     is_ban = models.BooleanField(default=False)
+
+    def get_image_from_url(self, url):
+       img_tmp = NamedTemporaryFile()
+       with urlopen(url) as uo:
+           assert uo.status == 200
+           img_tmp.write(uo.read())
+           img_tmp.flush()
+       img = File(img_tmp)
+       img_name = self.name+".jpg"
+       self.image.save(img_name, img)
 
     # def save(self, *args, **kwargs):
     #     for x in [self.image, self.cover]:
@@ -103,7 +117,7 @@ class Category(models.Model):
 class Product(models.Model):
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE, null=True, related_name="shopproduct")
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    image1 = models.ImageField(upload_to='products', default='default/product.jpg', null=True)
+    image1 = models.ImageField(upload_to='products', null=True)
     image2 = models.ImageField(upload_to='products', blank=True, null=True)
     image3 = models.ImageField(upload_to='products', blank=True, null=True)
     image4 = models.ImageField(upload_to='products', blank=True, null=True)
@@ -120,6 +134,27 @@ class Product(models.Model):
     priority = models.PositiveIntegerField(default=0)
     is_hide = models.BooleanField(default=False)
     rating = models.DecimalField(default=0, max_digits=3, decimal_places=1)
+
+    def get_image_from_url(self, url):
+        img_tmp = NamedTemporaryFile()
+        with urlopen(url) as uo:
+            assert uo.status == 200
+            img_tmp.write(uo.read())
+            img_tmp.flush()
+        img = File(img_tmp)
+        img_name = self.name+".jpg"
+        if self.image1==None:
+            self.image1.save(img_name, img)
+        elif self.image2==None:
+            self.image2.save(img_name, img)
+        elif self.image3==None:
+            self.image3.save(img_name, img)
+        elif self.image4==None:
+            self.image4.save(img_name, img)
+        elif self.image5==None:
+            self.image5.save(img_name, img)
+        elif self.image6==None:
+            self.image6.save(img_name, img)
 
     def save(self, *args, **kwargs):
         # for x in [self.image1, self.image2, self.image3, self.image4, self.image5, self.image6 ]:
