@@ -30,4 +30,4 @@ djangorestframework
 djangorestframework-simplejwt
 encodings
 psycopg2-binary
-
+instaloader
